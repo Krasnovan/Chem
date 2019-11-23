@@ -1,0 +1,31 @@
+from math import pi, sin, sqrt, fabs
+import random
+import time
+
+def GenerateRandomResistanceLine(sigma1, sigma2, sigma3, accuracy):
+    Resistanceline = []
+    i = 0
+    while i <= 1:
+        tetta = 2 * pi * i
+        i += accuracy
+        g = 0
+        while g <= 1:
+            sinphi = (2 * g) - 1
+            cosphi = sqrt(1 - (sinphi * sinphi))
+            sintetta = sin(tetta)
+            costetta = sqrt(1 - (sintetta * sintetta))
+            g += accuracy
+            x = fabs(sintetta * cosphi)
+            y = fabs(sintetta * sinphi)
+            z = fabs(costetta)
+            Resistance = (sigma1 * x) + (sigma2 * y) + (sigma3 * z)
+            Resistanceline.append(Resistance)
+    return Resistanceline
+
+print("Program time: {:>.3f}".format(result) + " seconds.")
+# не рекомендуется выставлять значение accuracy ниже 0.003
+# при accuracy = 0.005 время генерации списка около 5 секунд
+# среднее время выбора случайного элемента 1.5*E(-6) секунд
+# пример выбора случайного числа из построенного списка ниже
+# a = GenerateRandomResistanceLine(100 , 90, 7, 0.0005)
+# b = random.choice(a)
