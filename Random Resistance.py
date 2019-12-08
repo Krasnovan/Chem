@@ -82,30 +82,17 @@ def Random6ResistanceLine(sigma1, sigma2, sigma3, accuracy, RandomResistance6Lin
     for i in range(RandomResistance6LineLength):
         xx = random.choice(RVLine)
         g = random.choice(RVLine)
-        Random6ResistanceLine = []
         if xx == g:
             while not g == xx:
                 g = random.choice(RVLine)
-        zz = NormalizedVectorProduct(a, g)
-        yy = NormalizedVectorProduct(a, c)
-        c = []
+        zz = NormalizedVectorProduct(xx, g)
+        yy = NormalizedVectorProduct(xx, zz)
         fyy0 = fabs(yy[0])
         fyy1 = fabs(yy[1])
         fyy2 = fabs(yy[2])
         fzz0 = fabs(zz[0])
         fzz1 = fabs(zz[1])
         fzz2 = fabs(zz[2])
-        c.append(yy[0])
-        c.append(yy[1])
-        c.append(yy[2])
-        v = []
-        v.append(zz[0])
-        v.append(zz[1])
-        v.append(zz[2])
-        s1 = []
-        s2 = []
-        s3 = []
-        s4 = []
         d1xx0 = d1 * xx[0]
         d2yy0 = d2 * yy[0]
         d3zz0 = d3 * zz[0]
@@ -115,18 +102,6 @@ def Random6ResistanceLine(sigma1, sigma2, sigma3, accuracy, RandomResistance6Lin
         d1xx2 = d1 * xx[2]
         d2yy2 = d2 * yy[2]
         d3zz2 = d3 * zz[2]
-        s1.append(d1xx0 + d2yy0 + d3zz0)
-        s1.append(d1xx1 + d2yy1 + d3zz1)
-        s1.append(d1xx2 + d2yy2 + d3zz2)
-        s2.append(d1xx0 + d2yy0 - d3zz0)
-        s2.append(d1xx1 + d2yy1 - d3zz1)
-        s2.append(d1xx2 + d2yy2 - d3zz2)
-        s3.append(d1xx0 - d2yy0 + d3zz0)
-        s3.append(d1xx1 - d2yy1 + d3zz1)
-        s3.append(d1xx2 - d2yy2 + d3zz2)
-        s4.append(d1xx0 - d2yy0 - d3zz0)
-        s4.append(d1xx1 - d2yy1 - d3zz1)
-        s4.append(d1xx2 - d2yy2 - d3zz2)
         Rc = (sigma1 * fyy0 + sigma2 * fyy1 + sigma3 * fyy2) * lc
         Rv = (sigma1 * fzz0 + sigma2 * fzz1 + sigma3 * fzz2) * lv
         Rs1 = ls * ((sigma1 * fabs(d1xx0 + d2yy0 + d3zz0)) + (sigma2 * fabs(d1xx1 + d2yy1 + d3zz1)) + (sigma3 * fabs(d1xx2 + d2yy2 + d3zz2)))
@@ -143,4 +118,34 @@ def Random6ResistanceLine(sigma1, sigma2, sigma3, accuracy, RandomResistance6Lin
         Random6ResistanceLine.append(R6)
     return Random6ResistanceLine
 
-# строки с append на с v и si можно удалить
+def Random4ResistanceLine(sigma1, sigma2, sigma3, accuracy, RandomResistance4LineLength):
+    RVLine = RandomVectorLine(accuracy)
+    i = 0
+    Random4ResistanceLine = []
+    d0 = 1 / (sqrt(3))
+    d1 = -1 / (2 * sqrt(3))
+    d2 = 0.5
+    d3 = - sqrt((2 / 3))
+    l1 = 1
+    l2 = 1
+    l3 = 1
+    l4 = 1
+    for i in range(RandomResistance4LineLength):
+        xx = random.choice(RVLine)
+        g = random.choice(RVLine)
+        if xx == g:
+            while not g == xx:
+                g = random.choice(RVLine)
+        zz = NormalizedVectorProduct(xx, g)
+        yy = NormalizedVectorProduct(xx, zz)
+        R1 = l1 * ((sigma1 * fabs(zz[0])) + (sigma2 * fabs(zz[1])) + (sigma3 * fabs(zz[2])))
+        R2 = l2 * ((sigma1 * fabs((d0 * xx[0]) + (d3 * zz[0]))) + (sigma2 * fabs((d0 * xx[1]) + (d3 * zz[1]))) + (sigma3 * fabs((d0 * xx[2]) + (d3 * zz[2]))))
+        R3 = l3 * ((sigma1 * fabs((d1 * xx[0]) + (d2 * yy[0]) + (d1 * zz[0]))) + (sigma2 * fabs((d1 * xx[1]) + (d2 * yy[1]) + (d1 * zz[1]))) + (sigma3 * fabs((d1 * xx[2]) + (d2 * yy[2]) + (d1 * zz[2]))))
+        R4 = l4 * ((sigma1 * fabs((d1 * xx[0]) - (d2 * yy[0]) + (d1 * zz[0]))) + (sigma2 * fabs((d1 * xx[1]) - (d2 * yy[1]) + (d1 * zz[1]))) + (sigma3 * fabs((d1 * xx[2]) - (d2 * yy[2]) + (d1 * zz[2]))))
+        R4 = []
+        R4.append(R1)
+        R4.append(R2)
+        R4.append(R3)
+        R4.append(R4)
+        Random4ResistanceLine.append(R4)
+    return Random4ResistanceLine
